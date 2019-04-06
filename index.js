@@ -9,20 +9,14 @@ let  isGameStarted = false;
 let score = 0;
 let timer = document.getElementById('time');
 let result = document.getElementById('result');
+let minSquare, maxSquare;
 
-//let rad = document.getElementsByName('level');
+function isCheck(name) {
+    return document.querySelector('input[name="' + name + '"]:checked');
+}
 
 
-//function fun1() {
-//    var rad=document.getElementsByName('level');
-//    for (var i=0;i<rad.length; i++) {
-  //      if (rad[i].checked) {
-  //          alert('Выбран '+i+' radiobutton');
-  //      }
-//    }
-//}
 
-//getRadio.addEventListener('input', setGetRadio);
 start.addEventListener('click', startGame);
 game.addEventListener('click', handleBoxClick);
 gameTime.addEventListener('input', setGameTime);
@@ -35,10 +29,33 @@ function setGameTime() {
     timer.textContent = time.toFixed(1);
     timeHeader.classList.remove('hide');
     resultHeader.classList.add('hide');
+
 }
 
 
 function startGame() {
+
+    let rediobutton = (isCheck('level').id);
+
+    if (rediobutton == 'easy') {
+        minSquare = 70;
+        maxSquare = 150;
+
+    }
+
+    else if (rediobutton == 'normal') {
+        minSquare = 40;
+        maxSquare = 60;
+
+    }
+
+    else {
+        minSquare=10;
+        maxSquare=30;
+
+    }
+
+
     setGameTime();
     gameTime.setAttribute('disabled', 'true');
     score = 0;
@@ -50,7 +67,7 @@ function startGame() {
     let interval = setInterval(function () {
         let time = parseFloat(timer.textContent);
 
-        if (time <= 0 ) {
+        if (time <= 0) {
             clearInterval(interval);
             endGame()
         }
@@ -61,8 +78,8 @@ function startGame() {
     }, 100)
 
     renderBox();
-
 }
+
 
 
 function setGameScorre() {
@@ -100,7 +117,7 @@ function renderBox() {
 
     game.innerHTML = '';
     let box = document.createElement('div');
-    let boxSize = getRandom(30, 100);
+    let boxSize = getRandom(minSquare, maxSquare);
     const gameSize = game.getBoundingClientRect();
     let maxTop = gameSize.height - boxSize;
     let maxLeft = gameSize.width - boxSize;
@@ -108,14 +125,13 @@ function renderBox() {
 
     box.style.height = box.style.width = boxSize + 'px';
     box.style.position = 'absolute';
-    box.style.backgroundColor = '#' + getRandom(505, 999);
+    box.style.backgroundColor = '#' + getRandom(500, 999);
 
-    if (easy == true) {
-        box.style.top = getRandom(0, maxTop) + 'px';
-        box.style.left = getRandom(0, maxLeft) +  'px';
+    box.style.top = getRandom(0, maxTop) + 'px';
+    box.style.left = getRandom(0, maxLeft) +  'px';
 
-    }
-    else console.log("jjjj");
+
+
 
     box.style.cursor = 'pointer';
     box.setAttribute('data-box', 'true');
